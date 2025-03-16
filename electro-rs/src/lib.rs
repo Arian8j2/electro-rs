@@ -67,7 +67,7 @@ fn generate_config(wg_public: WgPublic, wg_private: WgPrivate) -> String {
         wg_private.ip,
         wg_public.publickey,
         wg_private.psk,
-        wg_public.endpoint,
-        wg_public.routes
+        wg_public.routes,
+        wg_public.endpoint
     )
 }

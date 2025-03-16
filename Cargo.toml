@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["electro-rs"]
+members = ["electro-rs", "electro-rs-cli"]
 
 [profile.release]
 lto = true

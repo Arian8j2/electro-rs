@@ -29,7 +29,8 @@ fn run_command(command: &str, args: &[&str]) -> anyhow::Result<String> {
     if !output.status.success() {
         let stderr = String::from_utf8(output.stderr)?;
         let error = anyhow::anyhow!("{stderr}").context(format!(
-            "command `ip` with args `{args:?}` exited with error"
+            "command `{command}` with args `{}` exited with error",
+            args.join(" ")
         ));
         return Err(error);
     }

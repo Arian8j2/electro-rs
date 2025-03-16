@@ -1,10 +1,11 @@
 use anyhow::{ensure, Context};
 use serde::de::DeserializeOwned;
+use std::fmt::Display;
 
 const ELCDN_SERVERS_API: &str = "https://elcdn.ir/app/servers.json";
 
 pub fn fetch_servers() -> anyhow::Result<Vec<Server>> {
-    get_request(ELCDN_SERVERS_API)
+    get_request(ELCDN_SERVERS_API).with_context(|| "couldn't fetch servers")
 }
 
 fn get_request<T: DeserializeOwned>(url: &str) -> anyhow::Result<T> {
@@ -23,12 +24,18 @@ fn get_request<T: DeserializeOwned>(url: &str) -> anyhow::Result<T> {
 
 pub type ServerName = String;
 
-#[derive(Debug, serde::Deserialize)]
+#[derive(Debug, Clone, serde::Deserialize)]
 #[serde(rename_all(deserialize = "camelCase"))]
 pub struct Server {
     pub name: ServerName,
     pub config_link: String,
     pub api_link: String,
+}
+
+impl Display for Server {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.name)
+    }
 }
 
 #[derive(Debug, serde::Deserialize)]
