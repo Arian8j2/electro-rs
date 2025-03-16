@@ -1,5 +1,6 @@
 # electro-rs
 An open-source reimplementation of the [Electro](https://electrotm.org/) WireGuard app for Linux, created through reverse engineering the Windows version. This project is unofficial and not affiliated with the original team.  
+![Demo](demo.gif)
 
 ## Installation
 1. **Install WireGuard**
