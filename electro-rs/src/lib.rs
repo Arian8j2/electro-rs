@@ -31,15 +31,6 @@ pub fn connect(server: &Server) -> anyhow::Result<()> {
     wireguard::connect(CONFIG_PATH)
 }
 
-pub fn disconnect() -> anyhow::Result<()> {
-    ensure!(is_on()?, "electro is not currently on");
-    wireguard::disconnect(CONFIG_PATH)
-}
-
-pub fn is_on() -> anyhow::Result<bool> {
-    wireguard::is_interface_up(WG_INTERFACE_NAME)
-}
-
 fn get_wireguard_private_info(server: &Server, wg_public: &WgPublic) -> anyhow::Result<WgPrivate> {
     let mut cache = Cache::load().with_context(|| "couldn't load cache")?;
     if let Some(cached_wg_privatge) = cache.get(&server.name) {
@@ -70,4 +61,13 @@ fn generate_config(wg_public: WgPublic, wg_private: WgPrivate) -> String {
         wg_public.routes,
         wg_public.endpoint
     )
+}
+
+pub fn disconnect() -> anyhow::Result<()> {
+    ensure!(is_on()?, "electro is not currently on");
+    wireguard::disconnect(CONFIG_PATH)
+}
+
+pub fn is_on() -> anyhow::Result<bool> {
+    wireguard::is_interface_up(WG_INTERFACE_NAME)
 }

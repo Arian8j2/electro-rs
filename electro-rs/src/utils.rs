@@ -1,6 +1,6 @@
 use anyhow::Context;
 use cidr_utils::{cidr::Ipv4Cidr, combiner::Ipv4CidrCombiner};
-use std::str::FromStr;
+use std::{process::Command, str::FromStr};
 
 pub fn optimize_routes(routes: &str) -> anyhow::Result<String> {
     let routes = routes.split(',').collect::<Vec<_>>();
@@ -16,6 +16,22 @@ pub fn optimize_routes(routes: &str) -> anyhow::Result<String> {
         .collect::<Vec<_>>()
         .join(",");
     Ok(result)
+}
+
+pub fn run_command(command: &str, args: &[&str]) -> anyhow::Result<String> {
+    let output = Command::new(command)
+        .args(args)
+        .output()
+        .with_context(|| format!("couldn't spawn `{command}` command"))?;
+    if !output.status.success() {
+        let stderr = String::from_utf8(output.stderr)?;
+        let error = anyhow::anyhow!("{stderr}").context(format!(
+            "command `{command}` with args `{}` exited with error",
+            args.join(" ")
+        ));
+        return Err(error);
+    }
+    Ok(String::from_utf8(output.stdout)?)
 }
 
 #[cfg(test)]
