@@ -6,5 +6,7 @@ edition = "2021"
 [dependencies]
 anyhow = { workspace = true }
 clap = { version = "4.5.32", features = ["derive"] }
+console = "0.15.11"
 electro-rs = { path = "../electro-rs" }
+indicatif = "0.17.11"
 inquire = "0.7.5"
