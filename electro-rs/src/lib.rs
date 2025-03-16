@@ -14,6 +14,9 @@ const WG_INTERFACE_NAME: &str = "electro-rs";
 // path must end with .conf
 const CONFIG_PATH: &str = "/tmp/electro-rs.conf";
 
+/// ip address of peer that is always on and should be accessible through vpn
+const TEST_CONNECTION_IP_ADDRESS: &str = "10.8.0.1";
+
 pub fn connect(server: &Server) -> anyhow::Result<()> {
     ensure!(!is_on()?, "electro is already on");
 
@@ -70,4 +73,21 @@ pub fn disconnect() -> anyhow::Result<()> {
 
 pub fn is_on() -> anyhow::Result<bool> {
     wireguard::is_interface_up(WG_INTERFACE_NAME)
+}
+
+pub fn test_connection() -> anyhow::Result<()> {
+    utils::run_command(
+        "ping",
+        &[
+            "-i",
+            ".25", // interval
+            "-c",
+            "4", // amount of echo requests
+            "-W",
+            "1", // maximum seconds that we wait for response per request
+            TEST_CONNECTION_IP_ADDRESS,
+        ],
+    )
+    .with_context(|| "testing connection failed")?;
+    Ok(())
 }

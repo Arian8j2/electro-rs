@@ -61,9 +61,19 @@ fn turn_on(server: Option<String>) -> anyhow::Result<()> {
                 .prompt()?
         }
     };
+
     let spinner = create_spinner("Connecting");
     electro_rs::connect(&selected_server)?;
     spinner.finish_with_message(console::style("Connected").green().bold().to_string());
+
+    let spinner = create_spinner("Testing connection");
+    electro_rs::test_connection()?;
+    spinner.finish_with_message(
+        console::style("Connection works successfully!")
+            .green()
+            .bold()
+            .to_string(),
+    );
     Ok(())
 }
 
