@@ -1,0 +1,7 @@
+[workspace]
+resolver = "2"
+members = ["electro-rs"]
+
+[profile.release]
+lto = true
+codegen-units = 1
