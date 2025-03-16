@@ -23,15 +23,16 @@ pub fn run_command(command: &str, args: &[&str]) -> anyhow::Result<String> {
         .args(args)
         .output()
         .with_context(|| format!("couldn't spawn `{command}` command"))?;
+    let stdout = String::from_utf8(output.stdout)?;
     if !output.status.success() {
         let stderr = String::from_utf8(output.stderr)?;
-        let error = anyhow::anyhow!("{stderr}").context(format!(
+        let error = anyhow::anyhow!("{stderr}\n{stdout}").context(format!(
             "command `{command}` with args `{}` exited with error",
             args.join(" ")
         ));
         return Err(error);
     }
-    Ok(String::from_utf8(output.stdout)?)
+    Ok(stdout)
 }
 
 #[cfg(test)]
