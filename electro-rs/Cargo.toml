@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.97"
+anyhow = { workspace = true }
 cidr-utils = "0.6.1"
 lazy_static = "1.5.0"
 serde = { version = "1.0.219", features = ["derive"] }
